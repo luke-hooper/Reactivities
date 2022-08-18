@@ -13,6 +13,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using persistence;
+using MediatR;
+using application.Activities;
+using AutoMapper;
+using application.Core;
+using API.Extensions;
 
 namespace API
 {
@@ -31,24 +36,7 @@ namespace API
         {
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
-            });
-
-            services.AddDbContext<DataContext>(opt =>
-            {
-                opt.UseSqlite(_config.GetConnectionString("defaultConnection"));
-            });
-
-            services.AddCors(opt =>
-            {
-                opt.AddPolicy("CorsPolicy", policy =>
-                {
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
-                });
-            });
-
+            services.AddApplicationServices(_config);
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -63,7 +51,7 @@ namespace API
             // app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
