@@ -20,7 +20,7 @@ axios.interceptors.response.use(async response => {
     const { data, status, config }: { data: any; status: number; config: any } = error.response!;
     switch (status) {
         case 400:
-            if (typeof data === 'string') {
+            if(typeof data === 'string'){
                 toast.error(data);
             }
             if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
@@ -34,7 +34,7 @@ axios.interceptors.response.use(async response => {
                     }
                 }
                 throw modalStateErrors.flat();
-            }
+            } 
             break;
         case 401:
             toast.error('unautharised')
